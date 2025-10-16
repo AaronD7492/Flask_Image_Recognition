@@ -69,3 +69,49 @@ def test_acceptance_valid_image_size_upload(client):
 
     assert response.status_code == 200
     assert b"Prediction" in response.data
+
+def test_acceptance_various_extensions(client):
+    """
+    Test Case: Upload of Images with Various Valid Extensions
+    - Purpose: Ensure the system correctly processes images with different valid file extensions.
+    - Method:
+        - Create mock image files with various common extensions (e.g., .png, .jpeg, .bmp).
+        - Simulate POST requests to the `/prediction` route for each file.
+        - Assert that each response has a status code of 200 and contains 'Prediction.'
+    """
+    valid_extensions = ["test_image.png", "test_image.jpeg", "test_image.bmp"]
+    for ext in valid_extensions:
+        img_data = BytesIO(b"valid_image_data")
+        img_data.name = ext
+
+        response = client.post(
+            "/prediction",
+            data={"file": (img_data, img_data.name)},
+            content_type="multipart/form-data"
+        )
+
+        assert response.status_code == 200
+        assert b"Prediction" in response.data
+
+def test_acceptance_various_image_formats(client):
+    """
+    Test Case: Upload of Images in Various Formats
+    - Purpose: Verify that the system can handle different image formats (e.g., RGB, Grayscale).
+    - Method:
+        - Create mock image files representing different formats.
+        - Simulate POST requests to the `/prediction` route for each format.
+        - Assert that each response has a status code of 200 and contains 'Prediction.'
+    """
+    image_formats = ["rgb_image.jpg", "grayscale_image.jpg"]
+    for fmt in image_formats:
+        img_data = BytesIO(b"valid_image_data_for_" + fmt.encode())
+        img_data.name = fmt
+
+        response = client.post(
+            "/prediction",
+            data={"file": (img_data, img_data.name)},
+            content_type="multipart/form-data"
+        )
+
+        assert response.status_code == 200
+        assert b"Prediction" in response.data
