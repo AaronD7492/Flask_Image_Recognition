@@ -20,4 +20,4 @@ def preprocess_img(img_path):
 # Predicting function
 def predict_result(predict):
     pred = model.predict(predict)
-    return np.argmax(pred[0], axis=-1)
+    return np.argmax(pred[0], axis=-1)12
