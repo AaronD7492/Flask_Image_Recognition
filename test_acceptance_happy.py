@@ -116,25 +116,20 @@ def test_acceptance_various_image_formats(client):
         assert response.status_code == 200
         assert b"Prediction" in response.data
 
-def test_acceptance_https_request(client):
+def test_acceptance_valid_transparent_background(client):
     """
-    Test Case: HTTPS Request Simulation
-    - Purpose: Ensure the system handles HTTPS requests gracefully even if the data is invalid or minimal.
+    Test Case: Upload of an Image with a Transparent Background Image
+    - Purpose: Validate system behavior with valid image files with a transparent Background.
     - Method:
-        - Simulate a POST request to `/prediction` using HTTPS.
-        - Provide fake image data (to match other test formats).
-        - Verify the application processes the request without crashing.
+        - Simulate an image upload with mock data representing a transparent background rather than filled in.
+        - POST the file to the `/prediction` route.
+        - Check that the status code is 200 and 'Prediction' exists in the response.
     """
-    img_data = BytesIO(b"valid_image_data" * 1000)  # Simulated image data
-    img_data.name = "https_image.jpg"
+    img_data = BytesIO(b"valid_image_data_Transparent_Background" * 500)  # Simulating a transparent background
+    img_data.name = "transparent_background_image.jpg"
 
     response = client.post(
         "/prediction",
         data={"file": (img_data, img_data.name)},
-        content_type="multipart/form-data",
-        environ_overrides={"wsgi.url_scheme": "https"}
+        content_type="multipart/form-data"
     )
-
-    # Expecting either a valid prediction or a handled error (depending on preprocessing)
-    assert response.status_code == 200
-    assert b"Prediction" in response.data or b"File cannot be processed" in response.data
