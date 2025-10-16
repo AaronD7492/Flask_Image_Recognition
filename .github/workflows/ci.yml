@@ -3,23 +3,23 @@ name: Python CI (pre-commit + pytest)
 on:
   push:
     branches:
-      - main  # Run on pushes made into the main branch
+      - main # Run on pushes made into the main branch
   pull_request:
     branches:
-      - main  # Run on pull requests targeting the main branch
+      - main # Run on pull requests targeting the main branch
 
 jobs:
   ci:
-    runs-on: ubuntu-latest  # Specify the OS to run the job
+    runs-on: ubuntu-latest # Specify the OS to run the job
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # Checks out your repository's code
+        uses: actions/checkout@v2 # Checks out your repository's code
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'  # Specify the Python version
+          python-version: "3.9" # Specify the Python version
 
       - name: Install dependencies
         run: |
@@ -30,7 +30,7 @@ jobs:
       # Demonstrates the linitng without blocking the build
       - name: Run pre-commit (lint hooks)
         run: pre-commit run --all-files --show-diff-on-failure
-        continue-on-error: true
+        continue-on-error: false # Set to true if you want to allow failures
 
       - name: Run pytests
         run: |
