@@ -66,3 +66,8 @@ def test_model_predictions_consistency(model):
 
     # Check that all predictions are the same
     assert all(p == predictions[0] for p in predictions), "Predictions for the same input should be consistent"
+
+def test_invalid_file_type():
+    """Test preprocess_img with an invalid file type."""
+    with pytest.raises(Exception):
+        preprocess_img("Python.txt")
