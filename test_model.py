@@ -39,6 +39,22 @@ def test_predict_result(model):
     # Check that the prediction is an integer (convert if necessary)
     assert isinstance(prediction, (int, np.integer)), "Prediction should be an integer class index"
 
+def test_predict_result_range(model):
+    """Test that the prediction is within the valid range."""
+    img_path = "test_images/3/Sign 3 (99).jpeg"  # Ensure the path is correct
+    processed_img = preprocess_img(img_path)
+
+    # Make a prediction
+    prediction = predict_result(processed_img)
+
+    # Check that the prediction is within the expected range (0-9 for digits)
+    assert 0 <= prediction <= 9, "Prediction should be between 0 and 9"
+
+def test_preprocess_img_invalid_path():
+    """Test preprocess_img with an invalid image path."""
+    with pytest.raises(FileNotFoundError):
+        preprocess_img("invalid/path/to/image.jpeg")
+
 
 # Advanced Tests
 
@@ -71,3 +87,8 @@ def test_invalid_file_type():
     """Test preprocess_img with an invalid file type."""
     with pytest.raises(Exception):
         preprocess_img("Python.txt")
+
+def test_empty_image_file():
+    """Test preprocess_img with an empty image file."""
+    with pytest.raises(Exception):
+        preprocess_img("empty_image.jpeg")  # Ensure this file exists and is empty
