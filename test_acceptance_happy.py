@@ -115,3 +115,26 @@ def test_acceptance_various_image_formats(client):
 
         assert response.status_code == 200
         assert b"Prediction" in response.data
+
+def test_acceptance_https_request(client):
+    """
+    Test Case: HTTPS Request Simulation
+    - Purpose: Ensure the system handles HTTPS requests gracefully even if the data is invalid or minimal.
+    - Method:
+        - Simulate a POST request to `/prediction` using HTTPS.
+        - Provide fake image data (to match other test formats).
+        - Verify the application processes the request without crashing.
+    """
+    img_data = BytesIO(b"valid_image_data" * 1000)  # Simulated image data
+    img_data.name = "https_image.jpg"
+
+    response = client.post(
+        "/prediction",
+        data={"file": (img_data, img_data.name)},
+        content_type="multipart/form-data",
+        environ_overrides={"wsgi.url_scheme": "https"}
+    )
+
+    # Expecting either a valid prediction or a handled error (depending on preprocessing)
+    assert response.status_code == 200
+    assert b"Prediction" in response.data or b"File cannot be processed" in response.data
