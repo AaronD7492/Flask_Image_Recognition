@@ -15,3 +15,17 @@ def test_missing_file(client):
     response = client.post("/prediction", data={}, content_type="multipart/form-data")
     assert response.status_code == 200
     assert b"File cannot be processed." in response.data  # Check if the error message is displayed
+
+def test_invalid_file_type(client):
+    """Test the prediction route with an invalid file type."""
+    invalid_file = BytesIO(b"This is not an image file.")
+    invalid_file.name = "test.txt"
+
+    response = client.post(
+        "/prediction",
+        data={"file": (invalid_file, invalid_file.name)},
+        content_type="multipart/form-data"
+    )
+
+    assert response.status_code == 200
+    assert b"File cannot be processed." in response.data  # Check if the error message is displayed

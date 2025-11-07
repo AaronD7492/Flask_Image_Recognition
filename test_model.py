@@ -46,7 +46,7 @@ def test_preprocess_img_invalid_path():
 
 def test_predict_result_invalid_input(model):
     """Test predict_result with invalid input shape."""
-    invalid_input = np.random.rand(1, 100, 100, 3)  # Invalid shape
+    invalid_input = np.random.rand(1, 100, 100, 30)  # Invalid shape
     with pytest.raises(Exception):
         predict_result(invalid_input)
 

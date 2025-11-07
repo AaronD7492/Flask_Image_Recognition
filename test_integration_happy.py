@@ -19,3 +19,17 @@ def test_successful_prediction(client):
     # Assertions
     assert response.status_code == 200
     assert b"Prediction" in response.data  # Modify this check based on your output
+
+def test_prediction_happy_valid_png(client):
+    """Happy path: upload a valid-looking PNG and expect a prediction result."""
+    img_data = BytesIO(b"fake_png_image_data")
+    img_data.name = "test_png.png"
+
+    response = client.post(
+        "/prediction",
+        data={"file": (img_data, img_data.name)},
+        content_type="multipart/form-data"
+    )
+
+    assert response.status_code == 200
+    assert b"Prediction" in response.data
