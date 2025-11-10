@@ -1,0 +1,12 @@
+[run]
+source = .
+omit =
+    */test_acceptance_edge_cases.py
+    */test_acceptance_happy.py
+    */test_acceptance_sad.py
+    */test_integration_happy.py
+    */test_integration_sad.py
+    */test_model.py
+
+[report]
+show_missing = True

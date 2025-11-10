@@ -1,8 +1,0 @@
-[run]
-source = src/calculator/
-omit =
-    */tests/*
-    */__init__.py
-
-[report]
-show_missing = True
