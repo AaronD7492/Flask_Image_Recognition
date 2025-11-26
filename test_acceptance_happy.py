@@ -70,16 +70,23 @@ def test_acceptance_valid_image_size_upload(client):
     assert response.status_code == 200
     assert b"Prediction" in response.data
 
+# Acceptance Test AT-HAPPY-EXT-001 – Upload images with different valid extensions
+# ------------------------------------------------------------------------------
+# GIVEN  the Flask Image Recognition application is running
+#        I can access the home page at "/"
+#        I have several image files with different valid extensions (.png, .jpeg, .bmp)
+# WHEN   I visit the home page
+#        upload each of these images through the prediction form
+# THEN   the server responds with HTTP 200 OK for each file
+#        each result page displays a Prediction for the uploaded image
 def test_acceptance_various_extensions(client):
-    """
-    Test Case: Upload of Images with Various Valid Extensions
-    - Purpose: Ensure the system correctly processes images with different valid file extensions.
-    - Method:
-        - Create mock image files with various common extensions (e.g., .png, .jpeg, .bmp).
-        - Simulate POST requests to the `/prediction` route for each file.
-        - Assert that each response has a status code of 200 and contains 'Prediction.'
-    """
     valid_extensions = ["test_image.png", "test_image.jpeg", "test_image.bmp"]
+
+    # Step 1: User visits home page
+    home_response = client.get("/")
+    assert home_response.status_code == 200
+
+    # Step 2: User uploads each file type
     for ext in valid_extensions:
         img_data = BytesIO(b"valid_image_data")
         img_data.name = ext
@@ -90,19 +97,27 @@ def test_acceptance_various_extensions(client):
             content_type="multipart/form-data"
         )
 
+        # Step 3: Behaviour-level checks
         assert response.status_code == 200
         assert b"Prediction" in response.data
 
+# Acceptance Test AT-HAPPY-FMT-002 – Upload images representing various formats
+# ------------------------------------------------------------------------------
+# GIVEN  the Flask Image Recognition application is running
+#        I can access the home page at "/"
+#        I have images representing different formats (RGB, Grayscale)
+# WHEN   I visit the home page
+#        upload each formatted image through the prediction form
+# THEN   the server responds with HTTP 200 OK for each file
+#        each result page displays a Prediction for the uploaded image
 def test_acceptance_various_image_formats(client):
-    """
-    Test Case: Upload of Images in Various Formats
-    - Purpose: Verify that the system can handle different image formats (e.g., RGB, Grayscale).
-    - Method:
-        - Create mock image files representing different formats.
-        - Simulate POST requests to the `/prediction` route for each format.
-        - Assert that each response has a status code of 200 and contains 'Prediction.'
-    """
     image_formats = ["rgb_image.jpg", "grayscale_image.jpg"]
+
+    # Step 1: User visits home page
+    home_response = client.get("/")
+    assert home_response.status_code == 200
+
+    # Step 2: User uploads images with different formats
     for fmt in image_formats:
         img_data = BytesIO(b"valid_image_data_for_" + fmt.encode())
         img_data.name = fmt
@@ -113,23 +128,34 @@ def test_acceptance_various_image_formats(client):
             content_type="multipart/form-data"
         )
 
+        # Step 3: Behaviour checks
         assert response.status_code == 200
         assert b"Prediction" in response.data
 
+# Acceptance Test AT-HAPPY-TRANSPARENT-003 – Upload image with transparent background
+# ----------------------------------------------------------------------------------
+# GIVEN  the Flask Image Recognition application is running
+#   AND  I can access the home page at "/"
+#   AND  I have an image with a transparent background
+# WHEN   I visit the home page
+#   AND  upload this image through the prediction form
+# THEN   the server responds with HTTP 200 OK
+#   AND  the result page displays a Prediction for the uploaded image
 def test_acceptance_valid_transparent_background(client):
-    """
-    Test Case: Upload of an Image with a Transparent Background Image
-    - Purpose: Validate system behavior with valid image files with a transparent Background.
-    - Method:
-        - Simulate an image upload with mock data representing a transparent background rather than filled in.
-        - POST the file to the `/prediction` route.
-        - Check that the status code is 200 and 'Prediction' exists in the response.
-    """
-    img_data = BytesIO(b"valid_image_data_Transparent_Background" * 500)  # Simulating a transparent background
-    img_data.name = "transparent_background_image.jpg"
+    # Step 1: User visits home page
+    home_response = client.get("/")
+    assert home_response.status_code == 200
+
+    # Step 2: User uploads transparent-background image
+    img_data = BytesIO(b"valid_image_data_Transparent_Background" * 500)
+    img_data.name = "transparent_background_image.png"
 
     response = client.post(
         "/prediction",
         data={"file": (img_data, img_data.name)},
         content_type="multipart/form-data"
     )
+
+    # Step 3: Behaviour checks
+    assert response.status_code == 200
+    assert b"Prediction" in response.data
