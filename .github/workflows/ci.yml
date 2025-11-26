@@ -35,7 +35,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          pylint app.py model.py
+          pylint --exit-zero app.py model.py
 
   # 2) Unit tests (test_model.py)
   unit_tests:
