@@ -133,4 +133,4 @@ jobs:
 
       - name: Push image
         run: |
-    
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-app:latest
