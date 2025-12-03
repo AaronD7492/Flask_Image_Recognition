@@ -110,3 +110,38 @@ jobs:
           pytest test_acceptance_happy.py \
                  test_acceptance_sad.py \
                  test_acceptance_edge_cases.py
+  
+  Build and Push Docker Image:
+
+  runs-on: ubuntu-latest
+  
+  steps:
+
+      name: Checkout code
+
+  uses: actions/checkout@v3
+
+         name: Log in to DockerHub
+
+  uses: docker/login-action@v3
+
+with:
+
+username: ${{ secrets.DOCKERHUB_USERNAME }}
+
+password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    name: Build image
+
+run: |
+
+docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-app:latest .
+
+ 
+
+ 
+
+name: Push image
+
+run: |
+    
