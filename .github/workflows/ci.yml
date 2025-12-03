@@ -112,6 +112,7 @@ jobs:
                  test_acceptance_edge_cases.py
   
   Build_and_Push_Docker_Image:
+    needs: [acceptance_tests] # only run if acceptance passes
     runs-on: ubuntu-latest
   
     steps:
