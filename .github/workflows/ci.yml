@@ -110,15 +110,16 @@ jobs:
           pytest test_acceptance_happy.py \
                  test_acceptance_sad.py \
                  test_acceptance_edge_cases.py
-
+                 
+  # 5) Build and push Docker image (only if acceptance tests pass)
   build_and_push_docker_image:
     needs: [acceptance_tests] # only run if acceptance passes
     runs-on: ubuntu-latest
-  
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
