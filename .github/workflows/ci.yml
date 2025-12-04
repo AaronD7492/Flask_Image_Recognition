@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-
+  workflow_dispatch:
 jobs:
   # 1) pre-commit + pylint
   lint:
