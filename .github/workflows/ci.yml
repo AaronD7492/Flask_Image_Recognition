@@ -150,7 +150,7 @@ jobs:
 
   # 6) Build and push Docker image (only if acceptance tests pass)
   build_and_push_docker_image:
-    needs: [acceptance_tests]
+    needs: [capacity_tests]
     runs-on: ubuntu-latest
 
     steps:
